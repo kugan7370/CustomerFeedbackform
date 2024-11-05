@@ -3,9 +3,13 @@
 include 'db.php';
 include 'navbar.php'; 
 
-
-
-$stmt = $conn->prepare("SELECT * FROM products");
+// Fetch all products
+$stmt = $conn->prepare("
+    SELECT p.*, COUNT(*) AS feedback_count, AVG(rating) AS average_rating
+    FROM products p 
+    LEFT JOIN feedback r ON p.id = r.productId 
+    GROUP BY p.id
+");
 $stmt->execute();
 $products = $stmt->fetchAll();
 ?>
@@ -14,6 +18,12 @@ $products = $stmt->fetchAll();
 <head>
     <title>Products</title>
     <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            /* padding: 20px; */
+            background-color: #f8f9fa;
+        }
         /* Container Styles */
         .container {
             max-width: 1200px;
@@ -104,6 +114,10 @@ $products = $stmt->fetchAll();
             background-color: #0056b3;
         }
 
+        .stars{
+            color: gold;
+        }
+
         /* Responsive Design */
         @media (max-width: 992px) {
             .col {
@@ -134,6 +148,29 @@ $products = $stmt->fetchAll();
                             <h5 class="card-title"><?php echo $product['name']; ?></h5>
                             <p class="card-text"><?php echo $product['description']; ?></p>
                             <p class="card-text">Price: $<?php echo $product['price']; ?></p>
+                            <p class="card-text">
+                            <span class="stars">
+                                <?php 
+                                if ($product['average_rating'] !== null) {
+                                    // need to be in star
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        echo $i <= $product['average_rating'] ? '★' : '☆'; 
+                                    }
+                                    // echo ' ' . round($product['average_rating'], 1) . '/' . $product['feedback_count'];
+
+                                  
+                                } 
+                                else {
+                                //    empty star
+                                    for ($i = 1; $i <= 5; $i++) {
+                                        echo '☆'; 
+                                    }
+                                   
+                                }
+                                ?>
+                            </span>
+                            </p>
+
                         </div>
                     </div>
                 </div>

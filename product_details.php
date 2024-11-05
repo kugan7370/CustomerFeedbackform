@@ -13,7 +13,7 @@ $count_stmt = $conn->prepare("SELECT COUNT(*) AS feedback_count, AVG(rating) AS 
 $count_stmt->execute([$product_id]);
 $result = $count_stmt->fetch();
 $feedback_count = $result['feedback_count'];
-$average_rating = $result['average_rating'] ? round($result['average_rating'], 1) : 0; // Round to 1 decimal place if exists
+$average_rating = $result['average_rating'] ? round($result['average_rating'], 1) : 0; 
 
 $feedback_stmt = $conn->prepare("SELECT f.comment, f.rating, u.email FROM feedback f JOIN users u ON f.userId = u.id WHERE f.productId = ?");
 $feedback_stmt->execute([$product_id]);
@@ -27,7 +27,7 @@ $feedbacks = $feedback_stmt->fetchAll();
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            /* padding: 20px; */
             background-color: #f8f9fa;
         }
         .container {

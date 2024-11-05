@@ -1,45 +1,50 @@
 /* feedback.css */
 
 body {
-    font-family: Arial, sans-serif; /* Set a basic font */
-    background-color: #f8f9fa; /* Light grey background */
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
+  
+}
+
+.mainContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
+    height: calc(100vh - 60px);
 }
 
 .container {
-    background-color: #ffffff; /* White background for the form */
+    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    width: 400px; /* Fixed width for the form */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    width: 400px; 
+   
 }
 
 h1 {
-    text-align: center; /* Center the title */
-    margin-bottom: 20px; /* Space below the title */
+    text-align: center; 
+    margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 15px; /* Space between form elements */
+    margin-bottom: 15px; 
 }
 
 label {
-    display: block; /* Block display for labels */
-    margin-bottom: 5px; /* Space below labels */
+    display: block; 
+    margin-bottom: 5px; 
 }
 
 textarea,
 input[type="number"] {
-    width: 100%; /* Full width */
-    padding: 10px; /* Padding inside input fields */
-    border: 1px solid #ced4da; /* Light border */
-    border-radius: 4px; /* Rounded corners */
-    box-sizing: border-box; /* Include padding in width */
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ced4da; 
+    border-radius: 4px; 
+    box-sizing: border-box;
 }
 
 textarea:focus,

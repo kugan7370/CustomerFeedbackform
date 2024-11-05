@@ -26,6 +26,12 @@ $purchases = $stmt->fetchAll();
 <head>
     <title>Purchased Products</title>
     <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            /* padding: 20px; */
+            background-color: #f8f9fa;
+        }
         /* Container Styles */
         .container {
             max-width: 1200px;
@@ -145,7 +151,7 @@ $purchases = $stmt->fetchAll();
                                 <h5 class="card-title"><?php echo htmlspecialchars($purchase['name']); ?></h5>
                                 <p class="card-text"><?php echo htmlspecialchars($purchase['description']); ?></p>
                                 <p class="card-text">Price: $<?php echo htmlspecialchars($purchase['price']); ?></p>
-                                <p class="purchase-date">Purchased on: <?php echo date("F j, Y, g:i a", strtotime($purchase['purchase_date'])); ?></p>
+                                <p class="purchase-date">Purchased on: <?php echo date("F j, Y", strtotime($purchase['purchase_date'])); ?></p>
                                 <a href="feedback.php?product_id=<?php echo $purchase['id']; ?>" class="btn-primary">Leave Feedback</a>
                             </div>
                         </div>

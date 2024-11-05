@@ -29,6 +29,7 @@ $product_id = $_GET['product_id'];
     <link rel="stylesheet" href="css/feedback.css"> 
 </head>
 <body>
+    <div class="mainContainer">
     <div class="container">
         <h1>Leave Feedback</h1>
         <form method="POST" action="">
@@ -43,6 +44,7 @@ $product_id = $_GET['product_id'];
             </div>
             <button type="submit" class="btn btn-primary">Submit Feedback</button>
         </form>
+    </div>
     </div>
 </body>
 </html>
