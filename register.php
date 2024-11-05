@@ -1,103 +1,51 @@
 <?php
 include 'db.php';
-session_start();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $contactNumber = $_POST['contactNumber'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
- 
-    $check = $conn->query("SELECT * FROM login WHERE email='$email'");
-    if ($check->num_rows > 0) {
-        $error = "Email already exists!";
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+    if ($stmt->rowCount() > 0) {
+        echo "Email already registered.";
     } else {
-       
-        $conn->query("INSERT INTO login (email, password) VALUES ('$email', '$password')");
-        $_SESSION['loggedin'] = true;
-        header("Location: customer.php");
+        $stmt = $conn->prepare("INSERT INTO users (email, contactNumber, password) VALUES (?, ?, ?)");
+        if ($stmt->execute([$email, $contactNumber, $password])) {
+            echo "Registration successful!";
+            header("Location: login.php");
+        } else {
+            echo "Error registering user.";
+        }
     }
 }
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Register</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f7f7f7;
-        }
-        .login-container {
-            background: #fff;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
-            width: 100%;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-        }
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-top: 0.5rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            width: 100%;
-            padding: 0.7rem;
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            margin-top: 1rem;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .login-link {
-            text-align: center;
-            margin-top: 1rem;
-        }
-        .login-link a {
-            color: #007bff;
-            text-decoration: none;
-        }
-        .login-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="login-container">
-        <h2>Register Form</h2>
-        <form method="post">
-            <label>Email:</label>
-            <input type="email" name="email" required>
-            <label>Password:</label>
-            <input type="password" name="password" required>
-            <button type="submit">Register</button>
+    <div class="container">
+        <h1>Register</h1>
+        <form method="POST" action="">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Contact Number</label>
+                <input type="text" name="contactNumber" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        <?php if (isset($error)) echo "<p style='color: red;'>$error</p>"; ?>
-        <div class="login-link">
-            <p>Already have an account? <a href="login.php">Login here</a></p>
-        </div>
     </div>
 </body>
 </html>
