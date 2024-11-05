@@ -3,16 +3,28 @@
 include 'db.php';
 include 'navbar.php'; 
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
+$userId = $_SESSION['user_id'];
 
-$stmt = $conn->prepare("SELECT * FROM products");
-$stmt->execute();
-$products = $stmt->fetchAll();
+// Fetch all purchased products for the logged-in user
+$stmt = $conn->prepare("
+    SELECT products.id, products.name, products.description, products.image, products.price, purchased.purchase_date 
+    FROM purchased 
+    JOIN products ON purchased.productId = products.id 
+    WHERE purchased.userId = ?
+    ORDER BY purchased.purchase_date DESC
+");
+$stmt->execute([$userId]);
+$purchases = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Products</title>
+    <title>Purchased Products</title>
     <style>
         /* Container Styles */
         .container {
@@ -90,6 +102,10 @@ $products = $stmt->fetchAll();
             margin: 8px 0;
         }
 
+        .purchase-date {
+            font-size: 12px;
+            color: #888;
+        }
         .btn-primary {
             padding: 8px 16px;
             background-color: #007bff;
@@ -98,10 +114,6 @@ $products = $stmt->fetchAll();
             text-decoration: none;
             border-radius: 5px;
             margin-top: auto;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
         }
 
         /* Responsive Design */
@@ -122,21 +134,25 @@ $products = $stmt->fetchAll();
 </head>
 <body>
     <div class="container">
-        <h1>Product List</h1>
+        <h1>Purchased Products</h1>
         <div class="row">
-            <?php foreach ($products as $product) { ?>
-                <div class="col">
-                    <div class="card">
-                    <a href="product_details.php?product_id=<?php echo $product['id']; ?>">
-                            <img src="<?php echo $product['image']; ?>" alt="Product Image">
-                        </a>
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo $product['name']; ?></h5>
-                            <p class="card-text"><?php echo $product['description']; ?></p>
-                            <p class="card-text">Price: $<?php echo $product['price']; ?></p>
+            <?php if (count($purchases) > 0) { ?>
+                <?php foreach ($purchases as $purchase) { ?>
+                    <div class="col">
+                        <div class="card">
+                                <img src="<?php echo $purchase['image']; ?>" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($purchase['name']); ?></h5>
+                                <p class="card-text"><?php echo htmlspecialchars($purchase['description']); ?></p>
+                                <p class="card-text">Price: $<?php echo htmlspecialchars($purchase['price']); ?></p>
+                                <p class="purchase-date">Purchased on: <?php echo date("F j, Y, g:i a", strtotime($purchase['purchase_date'])); ?></p>
+                                <a href="feedback.php?product_id=<?php echo $purchase['id']; ?>" class="btn-primary">Leave Feedback</a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
+            <?php } else { ?>
+                <p>No purchases found.</p>
             <?php } ?>
         </div>
     </div>

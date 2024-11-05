@@ -1,6 +1,6 @@
 <?php
-session_start();
 include 'db.php';
+include 'navbar.php'; 
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
@@ -26,13 +26,13 @@ $product_id = $_GET['product_id'];
 <html>
 <head>
     <title>Leave Feedback</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/feedback.css"> 
 </head>
 <body>
     <div class="container">
         <h1>Leave Feedback</h1>
         <form method="POST" action="">
-            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product_id); ?>">
             <div class="form-group">
                 <label>Comment</label>
                 <textarea name="comment" class="form-control" required></textarea>

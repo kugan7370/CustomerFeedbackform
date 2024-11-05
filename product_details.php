@@ -1,5 +1,7 @@
 <?php
+// session_start();
 include 'db.php';
+include 'navbar.php'; 
 
 $product_id = $_GET['product_id'];
 $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
@@ -41,20 +43,20 @@ $feedbacks = $feedback_stmt->fetchAll();
             margin-bottom: 20px;
         }
         .product-image {
-            max-width: 300px; /* Set the desired width for the product image */
-            height: auto; /* Maintain aspect ratio */
-            margin-right: 20px; /* Space between image and details */
+            max-width: 300px; 
+            height: auto; 
+            margin-right: 20px; 
             border-radius: 5px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
         }
         .product-details {
-            flex: 1; /* Allow details to take remaining space */
+            flex: 1; 
         }
         .feedback-section {
             margin-top: 20px;
         }
         .stars {
-            color: gold; /* Color for star icons */
+            color: gold; 
         }
         .feedback-card {
             border: 1px solid #ddd;
@@ -75,6 +77,21 @@ $feedbacks = $feedback_stmt->fetchAll();
             font-style: italic;
             margin-top: 20px;
         }
+.btn-primary {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #28a745; 
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #218838; 
+}
+
     </style>
 </head>
 <body>
@@ -99,6 +116,9 @@ $feedbacks = $feedback_stmt->fetchAll();
                 </p>
                 <p><?php echo htmlspecialchars($product['description']); ?></p>
                 <p>Price: $<?php echo htmlspecialchars($product['price']); ?></p>
+
+                 <!-- Purchase button -->
+                 <a href="purchase.php?product_id=<?php echo $product['id']; ?>" class="btn btn-primary">Purchase</a>
             </div>
         </div>
 
